@@ -50,9 +50,9 @@ const redeemUsernamePassword = async (id, login, password) => {
 
 	if (req2.statusCode === 429) return { success: false, rateLimit: true };
 
-	cookies = { 
-		...cookies, 
-		...parseSetCookie(req2.headers["set-cookie"]) 
+	cookies = {
+		...cookies,
+		...parseSetCookie(req2.headers["set-cookie"])
 	};
 
 	const json2 = JSON.parse(req2.body);
@@ -90,7 +90,7 @@ const refreshToken = async (user) => {
 	if (!response.success && user.auth.login && user.auth.password) response = await redeemUsernamePassword(user.id, user.auth.login, user.auth.password);
 
 	if (!response.success && !response.rateLimit) return { success: false };
-	
+
 	return response;
 }
 
