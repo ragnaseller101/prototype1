@@ -5,9 +5,9 @@ module.exports = {
 	async execute(interaction) {
 		if (interaction.isCommand()) {
 			const command = interaction.client.commands.get(interaction.commandName);
-	
+
 			if (!command) return;
-	
+
 			try {
 				await command.execute(interaction);
 			} catch (error) {
@@ -29,7 +29,7 @@ module.exports = {
 			const menu = interaction.client.menus.get(id);
 
 			if (!menu) return;
-			
+
 			try {
 				await menu.execute(interaction);
 			} catch (error) {

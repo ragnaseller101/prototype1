@@ -11,7 +11,8 @@ module.exports = {
 		console.log("Connecting to Database...");
 		await connect();
 		console.log(`Logged in as ${client.user.tag}!`);
-		await wasBotDown(client);
+		// await wasBotDown(client);
+		await notifyChannels(client);
 		await loadData();
 		keepAlive();
 		// notifyDailyShop(client);
@@ -21,6 +22,17 @@ module.exports = {
 		// 	notifyWeeklyShop(client);
 		// }, 60000);
 	},
+}
+
+const notifyChannels = async (client) => {
+	const value = await Client.get();
+
+	if (value.channels.length > 0) {
+		for(const channel of value.channels) {
+			const current_channel = await client.channels.fetch(channel);
+			await current_channel.send(`I'm up!`);
+		}
+	}
 }
 
 const wasBotDown = async (client) => {
