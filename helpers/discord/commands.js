@@ -49,25 +49,25 @@ const undeployCommands = {
 
 const bot = {
 	server: async (message) => {
-		
+
 		const Guilds = message.client.guilds.cache.map(guild => guild);
-		
-		let embeds = [{description: "I am a member of the following server/s:"}]
+
+		let embeds = [{ description: "I am a member of the following server/s:" }]
 
 		for (let i = 0; i < Guilds.length; i++) {
-				embeds.push({
-					author: {
-						name: Guilds[i].name,
-						iconURL: Guilds[i].iconURL() ? Guilds[i].iconURL() : "https://cdn.discordapp.com/attachments/1007184378050396200/1007185536982720542/discord_logo.png"
-					}
-				})
+			embeds.push({
+				author: {
+					name: Guilds[i].name,
+					iconURL: Guilds[i].iconURL() ? Guilds[i].iconURL() : "https://cdn.discordapp.com/attachments/1007184378050396200/1007185536982720542/discord_logo.png"
+				}
+			})
 		}
-		await message.channel.send({embeds: embeds});
+		await message.channel.send({ embeds: embeds });
 	},
 
 	changeVersion: async (message) => {
-		await ValorantVersion.update({manifestId: "123"});
-		await message.channel.send({content: "ManifestId changed!"});
+		await ValorantVersion.update({ manifestId: "123" });
+		await message.channel.send({ content: "ManifestId changed!" });
 	}
 }
 module.exports = {
