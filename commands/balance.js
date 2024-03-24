@@ -12,8 +12,8 @@ module.exports = {
 	async execute(interaction) {
 		await defer(interaction);
 		console.log(`[command] - ${interaction.user.tag} used /balance.`);
-        const user = await Users.findOne({id: interaction.user.id});
-        if (user) {
+		const user = await Users.findOne({ id: interaction.user.id });
+		if (user) {
 			if (user.users.length === 1) {
 				const message = await fetchBalance(interaction.channel, user.users[0]);
 				interaction.followUp(message);
@@ -21,7 +21,7 @@ module.exports = {
 			}
 			else {
 				let options = [];
-				for ( let i = 0; i < user.users.length; i++ ) {
+				for (let i = 0; i < user.users.length; i++) {
 					options.push({
 						label: user.users[i].username,
 						value: user.users[i].puuid
@@ -38,7 +38,7 @@ module.exports = {
 					components: [row]
 				});
 			}
-        } 
+		}
 		else {
 			interaction.followUp({
 				embeds: [errorEmbed("You have no account stored in the database!")]

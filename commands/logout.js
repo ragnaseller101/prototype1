@@ -1,23 +1,25 @@
 const { SlashCommandBuilder } = require("@discordjs/builders");
-const { MessageActionRow, MessageSelectMenu } = require("discord.js");
-const { defer } = require("../helpers/utilities");
 const { Users } = require("../models/database");
-const { fetchAccessoryShop } = require("../helpers/valorant/shop");
-const { errorEmbed, basicEmbed } = require("../helpers/discord/embed");
+const { defer } = require("../helpers/utilities");
+const { successEmbed, errorEmbed, basicEmbed } = require("../helpers/discord/embed");
+const { MessageActionRow, MessageSelectMenu } = require("discord.js");
 
 module.exports = {
 	data: new SlashCommandBuilder()
-		.setName("shop2")
-		.setDescription("Show your current weekly accessory shop."),
+		.setName("logout")
+		.setDescription("Forget and permanently delete your account from the bot."),
 	async execute(interaction) {
 		await defer(interaction);
-		console.log(`[command] - ${interaction.user.tag} used /shop2.`);
+		console.log(`[command] - ${interaction.user.tag} used /logout.`);
 		const user = await Users.findOne({ id: interaction.user.id });
+
 		if (user) {
 			if (user.users.length === 1) {
-				const message = await fetchAccessoryShop(interaction.channel, user.users[0], true);
-				await interaction.followUp(message);
-				console.log(`Sent ${interaction.user.tag}'s weekly shop!`);
+				await Users.deleteOne({ id: interaction.user.id });
+				interaction.followUp({
+					embeds: [successEmbed(`<@${interaction.user.id}>'s account has been deleted from the database!`)]
+				});
+				console.log(`Deleted ${interaction.user.tag}'s account!`);
 			}
 			else {
 				let options = [];
@@ -30,11 +32,11 @@ module.exports = {
 				const placeholder = 'Choose an Account';
 				const row = new MessageActionRow();
 				const select = new MessageSelectMenu();
-				const id = `shop2-select`;
+				const id = `logout-select`;
 				row.addComponents(select.setCustomId(id).setPlaceholder(placeholder).addOptions(options));
 
 				await interaction.followUp({
-					embeds: [basicEmbed("Which account would you like to check the weekly accessory shop?")],
+					embeds: [basicEmbed("Which account would you like to delete?")],
 					components: [row]
 				});
 			}

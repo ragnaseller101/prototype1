@@ -17,7 +17,7 @@ module.exports = {
 		const password = interaction.options.getString('password');
 		let login = await redeemUsernamePassword(interaction.user.id, username, password);
 		if (login.success) {
-			const hasDuplicate = await Users.findOne({ 'users.puuid': login.user.puuid });
+			const hasDuplicate = await Users.findOne({ id: interaction.user.id, 'users.puuid': login.user.puuid });
 			if (!hasDuplicate) {
 				await Users.save(login.user);
 				interaction.followUp({
@@ -39,7 +39,7 @@ module.exports = {
 				embeds: [errorEmbed("Invalid username or password!")],
 				ephemeral: true
 			});
-            console.log(`Unable to log in ${interaction.user.tag}'s account!`);
+			console.log(`Unable to log in ${interaction.user.tag}'s account!`);
 		}
 
 	},

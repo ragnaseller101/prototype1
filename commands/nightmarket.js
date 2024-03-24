@@ -6,22 +6,22 @@ const { fetchNightMarket } = require("../helpers/valorant/shop");
 const { basicEmbed, errorEmbed } = require("../helpers/discord/embed");
 
 module.exports = {
-    data: new SlashCommandBuilder()
-        .setName("nightmarket")
-        .setDescription("Show your current night market."),
-    async execute(interaction) {
-        await defer(interaction);
+	data: new SlashCommandBuilder()
+		.setName("nightmarket")
+		.setDescription("Show your current night market."),
+	async execute(interaction) {
+		await defer(interaction);
 		console.log(`[command] - ${interaction.user.tag} used /nightmarket.`);
-        const user = await Users.findOne({ id: interaction.user.id });
-        if (user) {
-            if (user.users.length === 1) {
-                const message = await fetchNightMarket(interaction.channel, user.users[0]);
-                await interaction.followUp(message);
-                console.log(`Sent ${interaction.user.tag}'s night market!`);
-            }
-            else {
+		const user = await Users.findOne({ id: interaction.user.id });
+		if (user) {
+			if (user.users.length === 1) {
+				const message = await fetchNightMarket(interaction.channel, user.users[0]);
+				await interaction.followUp(message);
+				console.log(`Sent ${interaction.user.tag}'s night market!`);
+			}
+			else {
 				let options = [];
-				for ( let i = 0; i < user.users.length; i++ ) {
+				for (let i = 0; i < user.users.length; i++) {
 					options.push({
 						label: user.users[i].username,
 						value: user.users[i].puuid
@@ -37,13 +37,13 @@ module.exports = {
 					embeds: [basicEmbed("Which account would you like to check the night market?")],
 					components: [row]
 				});
-            }
-        }
-        else {
-            interaction.followUp({
+			}
+		}
+		else {
+			interaction.followUp({
 				embeds: [errorEmbed("You have no account stored in the database!")]
 			});
 			console.log("No account found in database.");
-        }
-    },
+		}
+	},
 };
