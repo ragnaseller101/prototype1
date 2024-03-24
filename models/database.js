@@ -18,6 +18,7 @@ const options = {
 module.exports = {
 	connect: async () => {
 		try {
+			mongoose.set('strictQuery', false);
 			await mongoose.connect(db_url, options).then(() => {
 				console.log("Connected to Database")
 			});
@@ -40,7 +41,7 @@ module.exports = {
 				region: value.region
 			}
 
-			let existing = await Users.findOne({id: user.id});
+			let existing = await Users.findOne({ id: user.id });
 			if (existing) {
 				existing.users.push(user);
 				return await existing.save();
